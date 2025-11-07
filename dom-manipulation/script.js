@@ -51,13 +51,21 @@ async function postQuoteToServer(quote) {
 
 // ---------- Conflict Resolution ----------
 function resolveConflicts(localQuotes, serverQuotes) {
-  // Simple strategy: server wins
   const merged = [...serverQuotes];
+  let conflictFound = false;
 
   localQuotes.forEach(local => {
     const exists = serverQuotes.find(s => s.id === local.id);
-    if (!exists) merged.push(local);
+    if (!exists) {
+      merged.push(local);
+      conflictFound = true;
+    }
   });
+
+  if (conflictFound) {
+    showNotification('Conflict detected and resolved!');
+    alert('Conflict detected and resolved!');
+  }
 
   console.log('Conflict resolved. Merged quotes:', merged);
   return merged;
@@ -91,7 +99,8 @@ async function syncQuotes() {
   saveLocalQuotes(mergedQuotes);
 
   updateUI(mergedQuotes);
-  showNotification('Quotes synced with server.');
+  showNotification('Quotes synced with server!');
+  alert('Quotes synced with server!');
 }
 
 // ---------- Update UI ----------
@@ -123,7 +132,8 @@ function addQuote(text, author) {
 
   postQuoteToServer(newQuote);
   updateUI(localQuotes);
-  showNotification('New quote added locally and sent to server.');
+  showNotification('New quote added locally and sent to server!');
+  alert('New quote added locally and sent to server!');
 }
 
 // ---------- Periodic Sync ----------
@@ -141,6 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateUI(quotes);
   }
 
-  showNotification('Quotes loaded successfully.');
+  showNotification('Quotes loaded successfully!');
+  alert('Quotes loaded successfully!');
 });
 
